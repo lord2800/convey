@@ -2,15 +2,17 @@
 namespace Convey;
 
 class Router {
-	private $table = [];
+	private $table = [
+		'GET' => [],
+		'POST' => [],
+		'PUT' => [],
+		'PATCH' => [],
+		'DELETE' => [],
+		'OPTIONS' => [],
+		'HEAD' => []
+	];
 
-	public function add($method, $pathExpr, callable $callback) {
-		$method = strtoupper($method);
-		if(!key_exists($method, $this->table)) {
-			$this->table[$method] = [];
-		}
-		$this->table[$method][] = new Route($pathExpr, $callback);
-	}
+	public function add($method, $pathExpr, callable $callback) { $this->table[strtoupper($method)][] = new Route($pathExpr, $callback); }
 
 	// aliases for common methods
 	public function get    ($pathExpr, callable $callback) { self::add('GET', $pathExpr, $callback); }
