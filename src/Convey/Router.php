@@ -26,7 +26,7 @@ class Router {
 	public function route($method, $path) {
 		foreach($this->table[strtoupper($method)] as $route) {
 			$args = $route->match($path);
-			if(!$args && is_array($args)) {
+			if(is_array($args)) {
 				return [$args, $route->callback];
 			}
 		}
