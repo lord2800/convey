@@ -56,7 +56,7 @@ class Route {
 	public function regex() { return $this->path; }
 
 	public function match($path) {
-		if(preg_match($this->path, $path) === 1) {
+		if(preg_match($this->path, $path, $matches) === 1) {
 			return $matches;
 		}
 		return false;

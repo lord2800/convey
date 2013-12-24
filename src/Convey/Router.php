@@ -24,7 +24,7 @@ class Router {
 	public function head   ($pathExpr, callable $callback) { self::add('HEAD', $pathExpr, $callback); }
 
 	public function route($method, $path) {
-		foreach($this->table[$method] as $route) {
+		foreach($this->table[strtoupper($method)] as $route) {
 			$args = $route->match($path);
 			if(!$args && is_array($args)) {
 				return [$args, $route->callback];
