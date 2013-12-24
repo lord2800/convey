@@ -1,0 +1,22 @@
+{
+    "name": "lord2800/convey",
+    "description": "A micro-routing utility based on PCRE and Express",
+    "require-dev": {
+        "phpunit/phpunit": "dev-master",
+        "squizlabs/php_codesniffer": "dev-master",
+        "scrutinizer/php-analyzer": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeff Hubbard",
+            "email": "lord2800@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Convey": "src/"
+        }
+    }
+}

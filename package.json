@@ -1,0 +1,20 @@
+{
+  "main": "Gruntfile.js",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-gh-pages": "~0.9.0",
+    "grunt-parallelize": "~0.1.1",
+    "grunt-php-analyzer": "~0.1.0",
+    "grunt-phpcs": "~0.2.1",
+    "grunt-phplint": "~0.0.5",
+    "grunt-phpunit": "~0.3.2",
+    "grunt-contrib-watch": "~0.5.3"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lord2800/di.php.git"
+  }
+}
