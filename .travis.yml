@@ -2,9 +2,17 @@ language: php
 php:
  - 5.5
 
+env:
+  global:
+    secure: "mj8Ptc6Mx0tYQy7qFVMrPThHGhXETdYYk1ElwohKKweVGrIbEdIJA7Fy9GBckq4SjDyxtRJHoSCKznc8l78U06vWnFqJUB4IVGvqfBTneRTHx2ksErJz31TBm6aW6pf7sgHHKoeF5pJ/6sjCq1mlUyAdt7LqfT/OflHbnddYS1I="
+
 install:
  - composer install --prefer-dist --dev
  - npm install -g grunt-cli
  - npm install
 
-script: grunt test
+script:
+ - grunt test
+
+after_success:
+ - grunt gh-pages

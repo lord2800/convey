@@ -25,6 +25,19 @@ module.exports = function (grunt) {
 				configuration: 'phpunit.xml'
 			}
 		},
+		'gh-pages': {
+			options: {
+				base: 'docs',
+				message: 'Auto-commit via Travis [ci-skip]',
+				repo: 'https://' + process.env.GH_OAUTH_TOKEN + '@github.com/lord2800/convey.git',
+				silent: true,
+				user: {
+					name: 'Travis CI',
+					email: 'lord2800@gmail.com'
+				}
+			},
+			src: ['**']
+		},
 		watch: {
 			test: {
 				files: ['tests/**/*.php'],
