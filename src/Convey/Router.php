@@ -13,13 +13,13 @@ class Router {
 	}
 
 	// aliases for common methods
-	public function get($pathExpr, callback $callback) { self::add('GET', $pathExpr, $callback); }
-	public function post($pathExpr, callback $callback) { self::add('POST', $pathExpr, $callback); }
-	public function put($pathExpr, callback $callback) { self::add('PUT', $pathExpr, $callback); }
-	public function patch($pathExpr, callback $callback) { self::add('PATCH', $pathExpr, $callback); }
-	public function delete($pathExpr, callback $callback) { self::add('DELETE', $pathExpr, $callback); }
-	public function options($pathExpr, callback $callback) { self::add('OPTIONS', $pathExpr, $callback); }
-	public function head($pathExpr, callback $callback) { self::add('HEAD', $pathExpr, $callback); }
+	public function get    ($pathExpr, callable $callback) { self::add('GET', $pathExpr, $callback); }
+	public function post   ($pathExpr, callable $callback) { self::add('POST', $pathExpr, $callback); }
+	public function put    ($pathExpr, callable $callback) { self::add('PUT', $pathExpr, $callback); }
+	public function patch  ($pathExpr, callable $callback) { self::add('PATCH', $pathExpr, $callback); }
+	public function delete ($pathExpr, callable $callback) { self::add('DELETE', $pathExpr, $callback); }
+	public function options($pathExpr, callable $callback) { self::add('OPTIONS', $pathExpr, $callback); }
+	public function head   ($pathExpr, callable $callback) { self::add('HEAD', $pathExpr, $callback); }
 
 	public function route($method, $path) {
 		foreach($this->table[$method] as $route) {
