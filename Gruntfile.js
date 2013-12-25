@@ -32,7 +32,7 @@ module.exports = function (grunt) {
 		'gh-pages': {
 			options: {
 				base: 'docs',
-				message: 'Auto-commit via Travis [ci-skip]',
+				message: 'Auto-commit via Travis [ci skip]',
 				repo: 'https://' + process.env.GH_OAUTH_TOKEN + '@github.com/lord2800/convey.git',
 				silent: true,
 				user: {
