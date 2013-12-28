@@ -24,13 +24,18 @@ class Router {
 	public function head   ($pathExpr, callable $callback) { self::add('HEAD', $pathExpr, $callback); }
 
 	public function route($method, $path) {
+		$results = [];
 		foreach($this->table[strtoupper($method)] as $route) {
 			$args = $route->match($path);
 			if(is_array($args)) {
-				return [$args, $route->callback];
+				$results[] = [$args, $route->callback];
 			}
 		}
 		// default is a no-op route
-		return [[], function () {}];
+		if(empty($results)) {
+			return [[[], function () {}]];
+		} else {
+			return $results;
+		}
 	}
 }
