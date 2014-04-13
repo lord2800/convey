@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 			app: ['src/**/*.php', 'tests/**/*.php']
 		},
 		phpcs: {
-			app: { dir: 'src' },
+			app: { dir: ['src'] },
 			options: { bin: 'vendor/bin/phpcs', standard: 'PSR1' }
 		},
 		// seemingly broken?

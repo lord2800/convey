@@ -1,6 +1,6 @@
 {
     "name": "lord2800/convey",
-    "description": "A micro-routing utility based on PCRE and Express",
+    "description": "A micro-routing utility that returns the route information. Based on PCRE (for syntax) and Express for Node.js (for api).",
     "require-dev": {
         "phpunit/phpunit": "dev-master",
         "squizlabs/php_codesniffer": "dev-master",
