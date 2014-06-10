@@ -10,86 +10,121 @@ class RouterTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testRouterShouldReturnAllRoutesThatMatch() {
-		$fn = function () {};
+		$count = 0;
+		$fn = function () use(&$count) { $count++; };
 		$this->router->add('get', '/', $fn);
 		$this->router->add('get', '/', $fn);
 
 		$route = $this->router->route('get', '/');
-		$this->assertNotEmpty($route[0][0]);
-		$this->assertNotEmpty($route[1][0]);
-		$this->assertSame($fn, $route[0][1]);
-		$this->assertSame($fn, $route[1][1]);
+		$this->assertSame(2, count($route));
+		$this->assertInstanceOf('Closure', $route[0]);
+		$this->assertInstanceOf('Closure', $route[1]);
+		$route[0]();
+		$this->assertSame(1, $count);
+		$route[1]();
+		$this->assertSame(2, $count);
 	}
 
 	public function testFailedRouteShouldReturnEmptyRoute() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->add('get', '/', $fn);
 		$route = $this->router->route('get', '/not/the/path');
-		$this->assertEmpty($route[0][0]);
-		$this->assertNotSame($fn, $route[0][1]);
+		$this->assertInstanceOf('Closure', $route[0]);
+		$this->assertNotSame($fn, $route[0]);
+		$route[0]();
+		$this->assertFalse($called);
 	}
 
 	public function testAddShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->add('get', '/', $fn);
 		$route = $this->router->route('get', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testGetShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->get('/', $fn);
 		$route = $this->router->route('get', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testPutShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->put('/', $fn);
 		$route = $this->router->route('put', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testPostShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->post('/', $fn);
 		$route = $this->router->route('post', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testDeleteShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->delete('/', $fn);
 		$route = $this->router->route('delete', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testOptionsShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->options('/', $fn);
 		$route = $this->router->route('options', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testHeadShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->head('/', $fn);
 		$route = $this->router->route('head', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
 	}
 
 	public function testPatchShouldPutRouteIntoTheTable() {
-		$fn = function () {};
+		$called = false;
+		$fn = function () use(&$called) { $called = true; };
 		$this->router->patch('/', $fn);
 		$route = $this->router->route('patch', '/');
-		$this->assertArrayHasKey('0', $route[0][0]);
-		$this->assertSame($fn, $route[0][1]);
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertTrue($called);
+	}
+
+	public function testShouldPassArgumentsThroughToTheHandler() {
+		$o = null;
+		$t = null;
+		$fn = function ($one, $two) use(&$o, &$t) { $o = $one; $t = $two; };
+		$this->router->get('/{one}/{two}', $fn);
+		$route = $this->router->route('get', '/a/b');
+		$this->assertArrayHasKey('0', $route);
+		$route[0]();
+		$this->assertSame('a', $o);
+		$this->assertSame('b', $t);
 	}
 }

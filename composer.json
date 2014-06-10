@@ -1,6 +1,9 @@
 {
     "name": "lord2800/convey",
-    "description": "A micro-routing utility that returns the route information. Based on PCRE (for syntax) and Express for Node.js (for api).",
+    "description": "A micro-routing utility that returns the route information, utilizing RFC 6570 conventions.",
+    "require": {
+        "rize/uri-template": "~0.2.6"
+    },
     "require-dev": {
         "phpunit/phpunit": "dev-master",
         "squizlabs/php_codesniffer": "dev-master",

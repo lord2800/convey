@@ -1,6 +1,8 @@
 <?php
 namespace Convey;
 
+use Rize\UriTemplate;
+
 class Router {
 	private $table = [
 		'GET' => [],
@@ -11,31 +13,37 @@ class Router {
 		'OPTIONS' => [],
 		'HEAD' => []
 	];
+	protected $emptyRoute;
+	public function __construct() { $this->emptyRoute = \Closure::bind(function () {}, null); }
 
-	public function add($method, $pathExpr, callable $callback) { $this->table[strtoupper($method)][] = new Route($pathExpr, $callback); }
+	public function add($method, $path, callable $cb) {
+		$this->table[strtoupper($method)][] = [$path, $cb];
+	}
 
 	// aliases for common methods
-	public function get    ($pathExpr, callable $callback) { self::add('GET', $pathExpr, $callback); }
-	public function post   ($pathExpr, callable $callback) { self::add('POST', $pathExpr, $callback); }
-	public function put    ($pathExpr, callable $callback) { self::add('PUT', $pathExpr, $callback); }
-	public function patch  ($pathExpr, callable $callback) { self::add('PATCH', $pathExpr, $callback); }
-	public function delete ($pathExpr, callable $callback) { self::add('DELETE', $pathExpr, $callback); }
-	public function options($pathExpr, callable $callback) { self::add('OPTIONS', $pathExpr, $callback); }
-	public function head   ($pathExpr, callable $callback) { self::add('HEAD', $pathExpr, $callback); }
+	public function get    ($path, callable $cb) { self::add('GET',     $path, $cb); }
+	public function post   ($path, callable $cb) { self::add('POST',    $path, $cb); }
+	public function put    ($path, callable $cb) { self::add('PUT',     $path, $cb); }
+	public function patch  ($path, callable $cb) { self::add('PATCH',   $path, $cb); }
+	public function delete ($path, callable $cb) { self::add('DELETE',  $path, $cb); }
+	public function options($path, callable $cb) { self::add('OPTIONS', $path, $cb); }
+	public function head   ($path, callable $cb) { self::add('HEAD',    $path, $cb); }
 
 	public function route($method, $path) {
+		$parser = new UriTemplate();
 		$results = [];
-		foreach($this->table[strtoupper($method)] as $route) {
-			$args = $route->match($path);
-			if(is_array($args)) {
-				$results[] = [$args, $route->callback];
+
+		$routes = $this->table[strtoupper($method)];
+		foreach($routes as $route) {
+			$args = $parser->extract($route[0], $path, true);
+			if(isset($args)) {
+				// reflect this function as late as possible, since *most* routes shouldn't be called
+				$ref = new \ReflectionFunction($route[1]);
+				$results[] = \Closure::bind(function () use($ref, $args) { return $ref->invokeArgs($args); }, null);
 			}
 		}
-		// default is a no-op route
-		if(empty($results)) {
-			return [[[], function () {}]];
-		} else {
-			return $results;
-		}
+
+		// always return a callable function inside an array
+		return empty($results) ? [$this->emptyRoute] : $results;
 	}
 }
